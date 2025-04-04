@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise for You</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff4d4d, #ff9999);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff3333, #ff6666);
+            border-radius: 10px;
+            box-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            transition: transform 1s ease-in-out;
+        }
+        
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(135deg, #ff1a1a, #ff4d4d);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transform-origin: top;
+            transform-style: preserve-3d;
+            transition: transform 1s ease-in-out;
+        }
+        
+        .message {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            background-color: yellow;
+            padding: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 100% 30%, 100% 70%, 50% 100%, 0% 70%, 0% 30%);
+        }
+        
+        .heart.left {
+            left: 10%;
+            top: 40%;
+        }
+        
+        .heart.right {
+            right: 10%;
+            top: 40%;
+        }
+    </style>
+</head>
+<body>
+    <audio id="loveSong" src="Tere Bina.mp3"></audio>
+    <div class="heart left"></div>
+    <div class="heart right"></div>
+    <div class="container" onclick="openEnvelope()">
+        <div class="flap" id="flap"></div>
+        <div class="envelope" id="envelope"></div>
+        <div class="message" id="hiddenText">I LOVE YOU SO MUCH! ❤️</div>
+    </div>
+
+    <script>
+        const flap = document.getElementById("flap");
+        const envelope = document.getElementById("envelope");
+        const hiddenText = document.getElementById("hiddenText");
+        const loveSong = document.getElementById("loveSong");
+
+        function openEnvelope() {
+            flap.style.transform = "rotateX(180deg)";
+            envelope.style.transform = "translateY(120px) scale(1.1)";
+            setTimeout(() => {
+                hiddenText.style.display = "block";
+                loveSong.play().catch(error => console.log("Playback error: ", error));
+            }, 800);
+
+            // Close envelope after 15 seconds
+            setTimeout(() => {
+                hiddenText.style.display = "none";
+                flap.style.transform = "rotateX(0deg)";
+                envelope.style.transform = "translateY(0px) scale(1)";
+                loveSong.pause();
+                loveSong.currentTime = 0;
+            }, 15000);
+        }
+    </script>
+</body>
+</html>
